@@ -1,0 +1,128 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Tree {
+	private TreeNode root;
+	public Tree(){
+		root=null;
+	}
+	
+	public void insert(int data){
+		TreeNode newNode = new TreeNode(data);
+		if(root==null){
+			root = newNode;
+		}
+		else{
+			TreeNode current = root;
+			TreeNode parent;
+			while(true){
+				parent = current;
+				if(data<current.data){
+					current=current.left;
+					if(current == null){
+						parent.left=newNode;
+						return;
+					}
+				}
+				else if(data>current.data){
+					current = current.right;
+					if(current == null){
+						parent.right=newNode;
+						return;
+					}
+				}
+				else{
+					System.out.println(data+" is a duplicated value, insert failed");
+					return;
+				}
+			}
+		}
+	}
+	
+	public void buildTree(int[] data){
+		for(int i=0;i<data.length;i++){
+			insert(data[i]);
+		}
+	}
+	
+	public void inOrder(TreeNode localRoot){
+		if(localRoot!=null){
+			inOrder(localRoot.left);
+			System.out.print(localRoot.data+"");
+			inOrder(localRoot.right);
+		}
+	}
+	
+	public void inOrder(){
+		this.inOrder(this.root);
+	}
+	
+	public void preOrder(TreeNode localRoot){
+		if(localRoot!=null){
+			System.out.print(localRoot.data+"");
+			inOrder(localRoot.left);
+			inOrder(localRoot.right);
+		}
+	}
+	
+	public void preOrder(){
+		this.inOrder(this.root);
+	}
+	
+	public void postOrder(TreeNode localRoot){
+		if(localRoot!=null){
+			inOrder(localRoot.left);
+			inOrder(localRoot.right);
+			System.out.print(localRoot.data+"");
+		}
+	}
+	
+	public void postOrder(){
+		this.inOrder(this.root);
+	}
+	
+	public void layertranverse(){
+		if(this.root==null){
+			return;
+		}
+		Queue<TreeNode> q = new LinkedList<TreeNode>();
+		q.add(root);
+		TreeNode t = new TreeNode(Integer.MAX_VALUE);
+		q.add(t);
+		TreeNode pre = null;
+		int count=0;
+		while(!q.isEmpty()){
+			TreeNode p = q.poll();
+			if(p.equals(pre) && p.equals(t))
+				break;
+			if(p.equals(t)){
+				q.add(t);
+				System.out.println();
+				count++;
+			}
+			else {
+				System.out.print(p.data);
+				System.out.print(" ");
+			}
+			if(p.left!=null){
+				q.add(p.left);
+			}
+			if(p.right!=null){
+				q.add(p.right);
+			}
+			pre = p;
+		}
+		System.out.println("The depth of the tree is: "+ count);
+	}
+}
+
+class TreeNode{
+	public int data;
+	public TreeNode left;
+	public TreeNode right;
+	public TreeNode(int data){
+		this.data=data;
+		this.left=null;
+		this.right=null;
+	}
+}
